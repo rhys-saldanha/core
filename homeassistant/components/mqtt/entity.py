@@ -1436,6 +1436,7 @@ class MqttEntity(
             and deleted_entry.disabled_by is not None
         ):
             # Enable previous deleted entity and enable it
+            hidden_by_user = deleted_entry.hidden_by is er.RegistryEntryHider.USER
             recreated_entry = entity_registry.async_get_or_create(
                 entity_platform, DOMAIN, self.unique_id
             )
@@ -1443,7 +1444,7 @@ class MqttEntity(
                 recreated_entry.entity_id,
                 disabled_by=None,
                 hidden_by=None
-                if self._config[CONF_VISIBLE_BY_DEFAULT]
+                if self._config[CONF_VISIBLE_BY_DEFAULT] and not hidden_by_user
                 else er.RegistryEntryHider.INTEGRATION,
             )
 
